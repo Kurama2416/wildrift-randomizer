@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomizador de Campeones - Wild Rift</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: linear-gradient(to right, #141e30, #243b55); 
+            color: white;
+        }
+        h1 { font-size: 28px; margin-bottom: 20px; }
+        select, button { 
+            padding: 10px; 
+            font-size: 16px; 
+            border-radius: 5px; 
+            border: none; 
+            margin: 10px; 
+        }
+        select { background: #f5f5f5; }
+        button { 
+            background: #ff9800; 
+            color: white; 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        button:hover { background: #e68900; }
+        p { font-size: 22px; font-weight: bold; margin-top: 20px; }
+        .fade { animation: fadeIn 1s ease-in-out; }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎲 Randomizador de Campeones - Wild Rift</h1>
+    <label for="linea">Elige una línea:</label>
+    <select id="linea">
+        <option value="top">Top</option>
+        <option value="jungla">Jungla</option>
+        <option value="mid">Mid</option>
+        <option value="adc">ADC</option>
+        <option value="support">Support</option>
+    </select>
+    <br>
+    <button onclick="randomizar()">🎮 Randomizar</button>
+    <p id="campeon">Presiona el botón para elegir un campeón</p>
+
+    <script>
+        const campeones = {
+            top: ["Darius", "Garen", "Camille", "Fiora", "Renekton"],
+            jungla: ["Lee Sin", "Master Yi", "Evelynn", "Vi", "Kha'Zix"],
+            mid: ["Ahri", "Zed", "Orianna", "Fizz", "Katarina"],
+            adc: ["Jinx", "Ezreal", "Miss Fortune", "Vayne", "Kai'Sa"],
+            support: ["Thresh", "Leona", "Nami", "Braum", "Yuumi"]
+        };
+
+        // Crear una lista de todos los campeones
+        let todosLosCampeones = [];
+        Object.values(campeones).forEach(lista => todosLosCampeones = todosLosCampeones.concat(lista));
+
+        function randomizar() {
+            const linea = document.getElementById("linea").value;
+            const probabilidad = Math.random(); // Número entre 0 y 1
+            
+            let elegido;
+            if (probabilidad < 0.9) {  
+                // 90% de probabilidad de elegir un campeón de la línea seleccionada
+                elegido = campeones[linea][Math.floor(Math.random() * campeones[linea].length)];
+            } else {
+                // 20% de probabilidad de elegir un campeón completamente aleatorio
+                elegido = todosLosCampeones[Math.floor(Math.random() * todosLosCampeones.length)];
+            }
+
+            let resultado = document.getElementById("campeon");
+            resultado.innerText = "🔥 Campeón elegido: " + elegido;
+            resultado.classList.remove("fade"); // Reinicia la animación
+            void resultado.offsetWidth; // Forzar reflujo para reiniciar animación
+            resultado.classList.add("fade"); // Aplica la animación
+        }
+    </script>
+</body>
+</html>
