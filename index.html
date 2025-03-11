@@ -58,7 +58,6 @@
                 opacity: 0;
                 transform: scale(0.8);
             }
-
             100% {
                 opacity: 1;
                 transform: scale(1);
@@ -76,40 +75,42 @@
         <option value="mid">Mid</option>
         <option value="adc">ADC</option>
         <option value="support">Support</option>
-        <option value="asesino">Asesino</option>
     </select>
     <br>
     <button onclick="randomizar()">🎮 Randomizar</button>
     <p id="campeon">Presiona el botón para elegir un campeón</p>
     <script>
         const campeones = {
-            top: ["Volibear", "Diana", "Garen", "Warwick", "Ornn", "Jax", "Dr. Mundo", "Kayle", "Renekton", "Shen", "Teemo", "Ambessa", "Pantheon", "Irelia", "Vladimir", "Mordekaiser", "Tryndamere", "Fiora", "Gnar", "Malphite", "Maokai", "Jayce", "Nasus", "Sett", "Sion", "Aatrox", "Camille", "Wukong", "Riven", "Singed", "Gragas", "Nautilus", "Akali", "Urgot", "Rengar", "Jarvan IV", "Yasuo", "Yone", "Zed", "Graves"],
-            jungla: ["Talon", "Vi", "Wukong", "Lillia", "Viego", "Shyvana", "Renekton", "Warwick", "Master Yi", "Amumu", "Pyke", "Sett", "Tryndamere", "Aatrox", "Evelynn", "Camille", "Fiddlesticks", "Gwen", "Ekko", "Fizz", "Diana", "Dr. Mundo", "Lee Sin", "Xin Zhao", "Nautilus", "Rengar", "Irelia", "Pantheon", "Shen", "Morgana", "Olaf", "Kayn", "Jax", "Gragas", "Kha'Zix", "Ambessa", "Riven", "Nunu & Willump", "Rammus", "Twitch", "Jarvan IV", "Kindred", "Maokai", "Zed"],
-            mid: ["Pantheon", "Twisted Fate", "Veigar", "Fizz", "Syndra", "Lucian", "Katarina", "Yone", "Zoe", "Talon", "Ahri", "Orianna", "Ziggs", "Kayle", "Aurelion Sol", "Seraphine", "Kassadin", "Morgana", "Lux", "Heimerdinger", "Diana", "Swain", "Viktor", "Teemo", "Kennen", "Akshan", "Brand", "Lissandra", "Annie", "Jayce", "Galio", "Vladimir", "Zyra", "Ekko", "Akali", "Pyke", "Yasuo"],
-            adc: ["Tristana", "Corki", "Lucian", "Xayah", "Zeri", "Ashe", "Nilah", "Orianna", "Senna", "Varus", "Jhin", "Seraphine", "Sivir", "Miss Fortune", "Kai'Sa", "Twitch", "Morgana", "Draven", "Jinx", "Ziggs", "Ezreal", "Brand", "Samira", "Karma", "Akshan", "Kalista", "Caitlyn", "Lux"],
-            support: ["Lulu", "Galio", "Leona", "Thresh", "Swain", "Seraphine", "Brand", "Pantheon", "Sona", "Yuumi", "Singed", "Zyra", "Milio", "Blitzcrank", "Alistar", "Rakan", "Gragas", "Soraka", "Ashe", "Shen", "Morgana", "Braum", "Janna", "Nami", "Senna", "Nautilus", "Lux", "Maokai", "Karma", "Annie", "Pyke"]
+            top: ["Volibear", "Diana", "Garen", "Jax", "Renekton", "Shen", "Fiora", "Malphite", "Sett", "Aatrox"],
+            jungla: ["Vi", "Wukong", "Lillia", "Viego", "Warwick", "Amumu", "Evelynn", "Lee Sin", "Kayn", "Kha'Zix"],
+            mid: ["Pantheon", "Twisted Fate", "Veigar", "Fizz", "Syndra", "Lucian", "Katarina", "Yone", "Zoe", "Ahri"],
+            adc: ["Tristana", "Corki", "Lucian", "Xayah", "Zeri", "Ashe", "Varus", "Jhin", "Miss Fortune", "Kai'Sa"],
+            support: ["Lulu", "Galio", "Leona", "Thresh", "Seraphine", "Brand", "Sona", "Yuumi", "Milio", "Blitzcrank"]
         };
 
         let todosLosCampeones = Object.values(campeones).flat();
+        let ultimoCampeon = "";
 
         function randomizar() {
             const linea = document.getElementById("linea").value;
-            const randomFactor = Math.random(); // Genera un número entre 0 y 1
-
             let elegido;
-            if (randomFactor < 0.5) {
-                // 50% de probabilidad de elegir un campeón de la línea seleccionada
-                elegido = campeones[linea][Math.floor(Math.random() * campeones[linea].length)];
-            } else if (randomFactor < 0.8) {
-                // 30% de probabilidad de elegir un campeón de otra línea aleatoria
-                let otrasLineas = Object.keys(campeones).filter(l => l !== linea);
-                let lineaAleatoria = otrasLineas[Math.floor(Math.random() * otrasLineas.length)];
-                elegido = campeones[lineaAleatoria][Math.floor(Math.random() * campeones[lineaAleatoria].length)];
-            } else {
-                // 20% de probabilidad de elegir cualquier campeón del juego
-                elegido = todosLosCampeones[Math.floor(Math.random() * todosLosCampeones.length)];
-            }
-
+            do {
+                const randomFactor = Math.random();
+                if (randomFactor < 0.5) {
+                    const indice = crypto.getRandomValues(new Uint32Array(1))[0] % campeones[linea].length;
+                    elegido = campeones[linea][indice];
+                } else if (randomFactor < 0.8) {
+                    let otrasLineas = Object.keys(campeones).filter(l => l !== linea);
+                    let lineaAleatoria = otrasLineas[Math.floor(Math.random() * otrasLineas.length)];
+                    const indice = crypto.getRandomValues(new Uint32Array(1))[0] % campeones[lineaAleatoria].length;
+                    elegido = campeones[lineaAleatoria][indice];
+                } else {
+                    const indice = crypto.getRandomValues(new Uint32Array(1))[0] % todosLosCampeones.length;
+                    elegido = todosLosCampeones[indice];
+                }
+            } while (elegido === ultimoCampeon);
+            
+            ultimoCampeon = elegido;
             let resultado = document.getElementById("campeon");
             resultado.innerText = "🔥 Campeón elegido: " + elegido;
             resultado.classList.remove("fade");
@@ -118,5 +119,4 @@
         }
     </script>
 </body>
-
 </html>
